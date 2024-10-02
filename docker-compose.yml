@@ -1,0 +1,16 @@
+#to mount the management API server & proxy serverinside the Docker Engine to enable reverse proxy through Docker
+name: reverse-proxy
+
+services: 
+  reverse-proxy-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: npm run dev
+    ports:
+      - "8080:8080" #for the docker image that listens for external request on local system
+      - "80:80" #for proxying
+    network_mode: bridge
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/app
